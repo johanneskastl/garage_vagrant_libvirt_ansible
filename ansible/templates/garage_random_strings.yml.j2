@@ -1,0 +1,9 @@
+---
+
+#
+# openssl rand -hex 32
+garage_rpc_secret: "{{ garage_rpc_secret | default(lookup('community.general.random_string', length=32, base64=False, upper=false, lower=false, override_special='0123456789abcdef', numbers=false)) }}"
+
+# openssl rand -base64 32
+garage_admin_token: "{{ garage_admin_token | default(lookup('community.general.random_string', length=32, base64=True)) }}"
+garage_metrics_token: "{{ garage_metrics_token | default(lookup('community.general.random_string', length=32, base64=True)) }}"
