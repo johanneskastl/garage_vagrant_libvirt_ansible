@@ -1,8 +1,9 @@
-# leap_15.6_template_vagrant_libvirt_ansible
+# garage_vagrant_libvirt_ansible
 
-This Vagrant setup creates a VM.
+This Vagrant setup creates a VM and sets up the
+[Garage](https://garagehq.deuxfleurs.fr/) S3-compatible storage solution on it.
 
-Default OS is openSUSE Leap 15.5. Although that can be changed in the
+Default OS is openSUSE Leap 15.6. Although that can be changed in the
 Vagrantfile, please beware that this will break the Ansible provisioning.
 
 ## Vagrant
@@ -18,21 +19,6 @@ Vagrantfile, please beware that this will break the Ansible provisioning.
 ## Cleaning up
 
 The VMs can be torn down after playing around using `vagrant destroy`.
-
-## Disabling the Ansible provisioning
-
-In case you do not want Ansible to provision something, just comment out the
-following lines in the `Vagrantfile`:
-
-```hcl
-    node.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-        ansible.limit = "all"
-      ansible.playbook = "ansible/playbook-vagrant.yml"
-    end # node.vm.provision
-```
-
-You also find all of the playbooks in the `ansible` folder.
 
 ## License
 
