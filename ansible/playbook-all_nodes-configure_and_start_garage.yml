@@ -1,0 +1,62 @@
+---
+- name: 'Configure and start garage'
+  hosts: 'all'
+  gather_facts: true
+  become: true
+
+  handlers:
+
+    - name: 'Restart the garage service'
+      ansible.builtin.systemd:
+        name: 'garage'
+        state: 'restarted'
+        daemon_reload: true
+
+  tasks:
+
+    - name: 'Set fact for rpc_secret_key'
+      ansible.builtin.set_fact:
+        garage_rpc_secret: "{{ lookup('community.general.random_string', length=64, base64=False, upper=false, lower=false, numbers=false, override_special='0123456789abcdef') }}"
+      when:
+        - 'garage_rpc_secret is undefined'
+
+    - name: 'Set fact for garage_admin_token'
+      ansible.builtin.set_fact:
+        garage_admin_token: "{{ lookup('community.general.random_string', length=32, base64=True) }}"
+      when:
+        - 'garage_admin_token is undefined'
+
+    - name: 'Set fact for garage_metrics_token'
+      ansible.builtin.set_fact:
+        garage_metrics_token: "{{ lookup('community.general.random_string', length=32, base64=True) }}"
+      when:
+        - 'garage_metrics_token is undefined'
+
+    - name: 'Create a local file with the random strings'
+      ansible.builtin.template:
+        src: 'garage_random_strings.yml.j2'
+        dest: "{{ playbook_dir }}/group_vars/all/garage_random_strings.yml"
+        mode: '0600'
+      # create the file on the Ansible control host
+      delegate_to: 'localhost'
+      become: false
+
+    - name: 'Run facts module to get latest information'
+      ansible.builtin.setup:
+
+    - name: 'Create the configuration file'
+      ansible.builtin.template:
+        src: 'garage.toml.j2'
+        dest: '/etc/garage.toml'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      notify:
+        - 'Restart the garage service'
+
+    - name: 'Start and enable the garage service'
+      ansible.builtin.systemd:
+        name: 'garage'
+        state: 'started'
+        enabled: true
+        daemon_reload: true
