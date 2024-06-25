@@ -3,3 +3,8 @@
 #
 .vagrant
 Vagrantfile.1
+
+# file containing the random strings,
+# that should be persisted between runs,
+# but are removed on "vagrant destroy"
+ansible/group_vars/all/garage_random_strings.yml
