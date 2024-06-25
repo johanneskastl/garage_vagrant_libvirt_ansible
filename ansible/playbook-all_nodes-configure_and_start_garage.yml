@@ -16,7 +16,16 @@
 
     - name: 'Set fact for rpc_secret_key'
       ansible.builtin.set_fact:
-        garage_rpc_secret: "{{ lookup('community.general.random_string', length=64, base64=False, upper=false, lower=false, numbers=false, override_special='0123456789abcdef') }}"
+        garage_rpc_secret: |
+          "{{lookup(
+          'community.general.random_string',
+          length=64,
+          base64=False,
+          upper=false,
+          lower=false,
+          numbers=false,
+          override_special='0123456789abcdef'
+          ) }}"
       when:
         - 'garage_rpc_secret is undefined'
 
