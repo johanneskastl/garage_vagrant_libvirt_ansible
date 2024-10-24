@@ -8,3 +8,6 @@ Vagrantfile.1
 # that should be persisted between runs,
 # but are removed on "vagrant destroy"
 ansible/group_vars/all/garage_random_strings.yml
+
+# ignore s3cmd script
+ansible/s3cmd_list_bucket.sh
