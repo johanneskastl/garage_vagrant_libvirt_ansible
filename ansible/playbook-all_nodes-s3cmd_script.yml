@@ -1,0 +1,15 @@
+---
+
+- name: 'Create s3cmd script'
+  hosts: 'all'
+  gather_facts: true
+  become: false
+
+  tasks:
+
+    - name: 'Create script'
+      delegate_to: 'localhost'
+      ansible.builtin.template:
+        src: 's3cmd_list_bucket.sh.j2'
+        dest: "{{ playbook_dir }}/s3cmd_list_bucket.sh"
+        mode: '0755'
