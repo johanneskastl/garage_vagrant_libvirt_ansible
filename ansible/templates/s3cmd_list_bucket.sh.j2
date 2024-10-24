@@ -1,0 +1,21 @@
+#!/bin/bash
+
+s3cmd_command="s3cmd \
+    --access_key=XXX \
+    --secret_key=YYY \
+    --host={{ hostvars['garage']['ansible_default_ipv4']['address'] }}:3900 \
+    --host-bucket={{ hostvars['garage']['ansible_default_ipv4']['address'] }}:3900 \
+    --no-ssl"
+
+echo "====="
+echo "Show bucket contents"
+${s3cmd_command} ls s3://vagrant-libvirt-bucket/
+echo "====="
+echo "Upload ansible.cfg"
+${s3cmd_command} put ansible.cfg s3://vagrant-libvirt-bucket/
+echo "====="
+echo "Show bucket contents"
+${s3cmd_command} ls s3://vagrant-libvirt-bucket/
+echo "====="
+
+exit 0
