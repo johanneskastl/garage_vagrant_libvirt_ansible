@@ -56,7 +56,7 @@
     - name: 'Create the configuration file'
       ansible.builtin.template:
         src: 'garage.toml.j2'
-        dest: '/etc/garage.toml'
+        dest: '/etc/garage/garage.toml'
         owner: 'root'
         group: 'root'
         mode: '0644'
